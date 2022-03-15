@@ -7,7 +7,10 @@ import { initializeApp } from 'firebase/app'
 import { useEffect } from 'react';
 
 
-
+const isSupported = () =>
+	'Notification' in window &&
+	'serviceWorker' in navigator &&
+	'PushManager' in window
 
 const App = ({ Component, pageProps }: AppProps) => {
 	// Get registration token. Initially this makes a network call, once retrieved
@@ -23,48 +26,53 @@ const App = ({ Component, pageProps }: AppProps) => {
 	})
 
 	async function displayNotification(notify: string, option?: NotificationOptions) {
-		if (Notification.permission == 'granted') {
-			const reg = await navigator.serviceWorker.getRegistration() as ServiceWorkerRegistration
-			reg.showNotification(notify, option);
+		if (isSupported()) {
+			if (Notification.permission == 'granted') {
+				const reg = await navigator.serviceWorker.getRegistration() as ServiceWorkerRegistration
+				reg.showNotification(notify, option);
+			}
 		}
 	}
 
 	useEffect(() => {
-		if (typeof window !== 'undefined') {
-			Notification.requestPermission()
+		if (isSupported()) {
+			if (typeof window !== 'undefined') {
+				Notification.requestPermission()
+			}
 		}
 	}, [])
 
 	useEffect(() => {
-		if (typeof window !== "undefined") {
+		if (isSupported()) {
+			if (typeof window !== "undefined") {
+				const messaging = getMessaging(app);
 
-			const messaging = getMessaging(app);
-
-			onMessage(messaging, (payload) => {
-				console.log('Message received. ', payload);
-				displayNotification(
-					payload.notification?.title as string,
-					{
-						image: payload.notification?.image,
-						body: payload.notification?.body,
-						data: payload.data
-					}
-				)
-			});
-
-			getToken(messaging)
-				.then((currentToken) => {
-					if (currentToken) {
-						console.log({ token: currentToken });
-					} else {
-						console.log('No registration token available. Request permission to generate one.');
-					}
-				})
-				.catch((err) => {
-					console.log('An error occurred while retrieving token. ', err);
+				onMessage(messaging, (payload) => {
+					console.log('Message received. ', payload);
+					displayNotification(
+						payload.notification?.title as string,
+						{
+							image: payload.notification?.image,
+							body: payload.notification?.body,
+							data: payload.data
+						}
+					)
 				});
 
+				getToken(messaging)
+					.then((currentToken) => {
+						if (currentToken) {
+							console.log({ token: currentToken });
+						} else {
+							console.log('No registration token available. Request permission to generate one.');
+						}
+					})
+					.catch((err) => {
+						console.log('An error occurred while retrieving token. ', err);
+					});
+			}
 		}
+
 	}, [app])
 
 	return (

@@ -3,9 +3,11 @@ const runtimeCaching = require('next-pwa/cache')
 
 module.exports = withPWA({
 	pwa: {
-		dest: 'public',
-		swSrc: './public/service-worker.js',
-		// runtimeCaching,
-		// importScripts: ['./pwa-worker.js'],
+		// swSrc: './public/worker-service.js',
+		// register: true,
+		sw: '/sw.js',
+		runtimeCaching,
+		dest: './public',
+		// importScripts: ['./worker-service.js'],
 	},
 })

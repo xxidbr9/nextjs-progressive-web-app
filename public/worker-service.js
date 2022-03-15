@@ -1,5 +1,5 @@
 import 'firebase/compat/messaging';
-import { clientsClaim } from 'workbox-core';
+import { clientsClaim, skipWaiting } from 'workbox-core';
 import { ExpirationPlugin } from 'workbox-expiration';
 import { NetworkOnly, NetworkFirst, CacheFirst, StaleWhileRevalidate } from 'workbox-strategies';
 import { registerRoute, setDefaultHandler, setCatchHandler } from 'workbox-routing';
@@ -7,7 +7,7 @@ import { matchPrecache, precacheAndRoute, cleanupOutdatedCaches } from 'workbox-
 import { initializeApp } from 'firebase/app';
 import { getMessaging, onBackgroundMessage } from "firebase/messaging/sw";
 
-self.skipWaiting()
+skipWaiting()
 clientsClaim();
 
 // must include following lines when using inject manifest module from workbox

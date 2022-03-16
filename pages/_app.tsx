@@ -42,6 +42,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 		}
 	}, [])
 
+
 	useEffect(() => {
 		if (isSupported()) {
 			if (typeof window !== "undefined") {
@@ -59,10 +60,15 @@ const App = ({ Component, pageProps }: AppProps) => {
 					)
 				});
 
+				displayNotification("ini notif",{
+					body:"gatau ini apa",
+					icon:"/images/favicon.png"
+				})
+
 				getToken(messaging)
 					.then((currentToken) => {
 						if (currentToken) {
-							console.log({ token: currentToken });
+							console.log("token:", currentToken);
 						} else {
 							console.log('No registration token available. Request permission to generate one.');
 						}
@@ -73,7 +79,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 			}
 		}
 
-	}, [app])
+	}, [app, isSupported])
 
 	return (
 		<ThemeProvider

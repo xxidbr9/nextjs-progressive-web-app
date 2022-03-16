@@ -5,16 +5,22 @@ import Meta from '@/components/meta'
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { initializeApp } from 'firebase/app'
 import { useEffect } from 'react';
+import AppIcon from '../public/images/icon-192.png'
 
 
-const isSupported = () =>
-	'Notification' in window &&
-	'serviceWorker' in navigator &&
-	'PushManager' in window
 
 const App = ({ Component, pageProps }: AppProps) => {
 	// Get registration token. Initially this makes a network call, once retrieved
 	// subsequent calls to getToken will return from cache.
+
+	const isSupported = () => {
+		if (typeof window !== "undefined") {
+			return 'Notification' in window &&
+				'serviceWorker' in navigator &&
+				'PushManager' in window
+		}
+	}
+
 	const app = initializeApp({
 		apiKey: "AIzaSyATeL3Ul0gDFlg5UM0Iw3Z5B_WPlt7UekA",
 		authDomain: "pwa-notification-33a7b.firebaseapp.com",
@@ -34,6 +40,23 @@ const App = ({ Component, pageProps }: AppProps) => {
 		}
 	}
 
+
+	if (isSupported()) {
+		const messaging = getMessaging(app);
+		onMessage(messaging, (payload) => {
+			console.log('Message received. ', payload);
+			displayNotification(
+				payload.notification?.title as string,
+				{
+					image: payload.notification?.image,
+					body: payload.notification?.body,
+					data: payload.data,
+					badge: AppIcon.src
+				}
+			)
+		});
+	}
+
 	useEffect(() => {
 		if (isSupported()) {
 			if (typeof window !== 'undefined') {
@@ -46,24 +69,12 @@ const App = ({ Component, pageProps }: AppProps) => {
 	useEffect(() => {
 		if (isSupported()) {
 			if (typeof window !== "undefined") {
+				// displayNotification("ini notif", {
+				// 	body: "gatau ini apa",
+				// 	icon: "/images/favicon.png"
+				// })
 				const messaging = getMessaging(app);
 
-				onMessage(messaging, (payload) => {
-					console.log('Message received. ', payload);
-					displayNotification(
-						payload.notification?.title as string,
-						{
-							image: payload.notification?.image,
-							body: payload.notification?.body,
-							data: payload.data
-						}
-					)
-				});
-
-				displayNotification("ini notif",{
-					body:"gatau ini apa",
-					icon:"/images/favicon.png"
-				})
 
 				getToken(messaging)
 					.then((currentToken) => {
@@ -79,7 +90,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 			}
 		}
 
-	}, [app, isSupported])
+	}, [app])
 
 	return (
 		<ThemeProvider

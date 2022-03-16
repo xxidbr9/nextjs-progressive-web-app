@@ -21,12 +21,14 @@ const firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging(app);
 
+
+// for background
 messaging.setBackgroundMessageHandler((payload) => {
 	let data = JSON.parse(payload.data.custom_notification);
 	let notificationTitle = data.title;
 	let notificationOptions = {
 		body: data.body,
-		icon: 'https://image.flaticon.com/icons/png/128/107/107822.png',
+		icon: '/images/icon-512.png',
 		// options event
 		actions: [
 			{ action: 'confirmAttendance', title: '👍 Confirm attendance' },
@@ -40,26 +42,26 @@ messaging.setBackgroundMessageHandler((payload) => {
 });
 
 //background notifications will be received here
-messaging.setBackgroundMessageHandler(function (payload) {
-	console.log('[firebase-messaging-sw.js] Received background message ', payload)
-	// Customize notification here
-	const notificationTitle = 'Background Message Title'
-	const notificationOptions = {
-		body: 'Background Message body.',
-		icon: '/firebase-logo.png'
-	}
+// messaging.setBackgroundMessageHandler(function (payload) {
+// 	console.log('[firebase-messaging-sw.js] Received background message ', payload)
+// 	// Customize notification here
+// 	const notificationTitle = 'Background Message Title'
+// 	const notificationOptions = {
+// 		body: 'Background Message body.',
+// 		icon: '/firebase-logo.png'
+// 	}
 
-	return self.registration.showNotification(notificationTitle, notificationOptions)
-})
+// 	return self.registration.showNotification(notificationTitle, notificationOptions)
+// })
 
 messaging.onBackgroundMessage(function (payload) {
 	console.log('[firebase-messaging-sw.js] Received background message ', payload)
 	const notificationTitle = 'Background Message Title'
 	const notificationOptions = {
 		body: 'Background Message body.',
-		icon: '/firebase-logo.png'
-	}
+		icon: '/images/icon-512.png',
 
+	}
 	return self.registration.showNotification(notificationTitle, notificationOptions)
 })
-// }
+

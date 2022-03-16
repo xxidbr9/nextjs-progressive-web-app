@@ -22,12 +22,14 @@
 - 🦄 Easily removable [nice-to-haves](#use-only-what-you-need)
 - 📱 Native-like mobile experience
 - 📦 Neatly wrapped like that avocado you got for christmas
+- 🔔 Notification Ready (FCM)
 
 ## Getting started
 
-1. [Use this template](https://github.com/mvllow/next-pwa-template/generate)
-2. Replace `public/images` with your own
-3. Enjoy ✨
+<!-- 1. [Use this template](https://github.com/mvllow/next-pwa-template/generate) -->
+1. Clone this Repo and remove .git folder
+1. Replace `public/images` with your own
+1. Enjoy ✨
 
 ## Use only what you need
 

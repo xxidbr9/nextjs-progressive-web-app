@@ -6,7 +6,7 @@
 <p align="center">Fluffless app template to inspire less</p>
 
 <p align="center">
-	<a href="nextjs-progressive-web-app-brown.vercel.app">Live demo</a>
+	<a href="https://nextjs-progressive-web-app-brown.vercel.app">Live demo</a>
 </p>
 
 <p align="center">
